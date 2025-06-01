@@ -15,6 +15,9 @@ async function main() {
       case "POST":
         result = await handlePostRequest(route, data);
         break;
+      case "DELETE":
+        result = await handleDeleteRequest(route);
+        break;
       default:
         console.log("Método no soportado. Usa GET, POST.");
         return;
@@ -46,9 +49,7 @@ async function handlePostRequest(route, data) {
   if (route !== "products") {
     throw new Error('Ruta no válida para POST. Usa "products"');
   }
-
   const [title, price, category] = data;
-
   if (!title || !price || !category) {
     throw new Error(
       "Faltan datos. Formato: POST products <title> <price> <category>"
@@ -69,4 +70,15 @@ async function handlePostRequest(route, data) {
   return await response.json();
 }
 
+// Manejar solicitudes DELETE
+async function handleDeleteRequest(route) {
+  if (!route.startsWith("products/")) {
+    throw new Error('Ruta no válida para DELETE. Usa "products/<id>"');
+  }
+  const productId = route.split("/")[1];
+  const response = await fetch(`${API_URL}/products/${productId}`, {
+    method: "DELETE",
+  });
+  return await response.json();
+}
 main();
