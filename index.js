@@ -3,9 +3,8 @@ import { argv } from "process";
 
 const API_URL = "https://fakestoreapi.com";
 
-async function main() {
+const main = async () => {
   const [, , method, route, ...data] = argv;
-
   try {
     let result;
     switch (method) {
@@ -26,10 +25,10 @@ async function main() {
   } catch (error) {
     console.error("Error:", error.message);
   }
-}
+};
 
 // Manejar solicitudes GET
-async function handleGetRequest(route) {
+const handleGetRequest = async (route) => {
   if (route === "products") {
     const response = await fetch(`${API_URL}/products`);
     return await response.json();
@@ -42,10 +41,10 @@ async function handleGetRequest(route) {
       'Ruta no válida para GET. Usa "products" o "products/<id>"'
     );
   }
-}
+};
 
 // Manejar solicitudes POST
-async function handlePostRequest(route, data) {
+const handlePostRequest = async (route, data) => {
   if (route !== "products") {
     throw new Error('Ruta no válida para POST. Usa "products"');
   }
@@ -55,7 +54,6 @@ async function handlePostRequest(route, data) {
       "Faltan datos. Formato: POST products <title> <price> <category>"
     );
   }
-
   const response = await fetch(`${API_URL}/products`, {
     method: "POST",
     headers: {
@@ -68,10 +66,10 @@ async function handlePostRequest(route, data) {
     }),
   });
   return await response.json();
-}
+};
 
 // Manejar solicitudes DELETE
-async function handleDeleteRequest(route) {
+const handleDeleteRequest = async (route) => {
   if (!route.startsWith("products/")) {
     throw new Error('Ruta no válida para DELETE. Usa "products/<id>"');
   }
@@ -80,5 +78,5 @@ async function handleDeleteRequest(route) {
     method: "DELETE",
   });
   return await response.json();
-}
+};
 main();
